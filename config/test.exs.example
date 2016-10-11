@@ -1,0 +1,19 @@
+use Mix.Config
+
+config :komoku, :servers, [
+  websocket: [
+    port: 7777
+  ]
+]
+
+config :komoku, Komoku.Storage.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  pool: Ecto.Adapters.SQL.Sandbox,
+  ownership_timeout: 60_000,
+  database: "komoku_ex_test",
+  username: "komoku_ex",
+  password: "komoku_ex",
+  hostname: "localhost"
+
+config :logger, level: :warn
+

@@ -21,4 +21,6 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [applications: [:kmk]]
     end
     ```
+## Development
 
+Copy `config/test.exs.example` to `config/test.exs` and make sure database name and user are properly set up.

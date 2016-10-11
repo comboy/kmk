@@ -28,6 +28,9 @@ defmodule Kmk.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:socket, "~> 0.3.5"}, # Websocket connection
+     {:poison, "~> 2.0"}, # JSON parsing
+     {:komoku, path: "/comboy/projects/ex/komoku", only: :test}, # FIXME use github, temp for faster dev
+    ]
   end
 end
