@@ -22,6 +22,9 @@ defmodule Kmk.Client do
   def ping(pid), do: GenServer.call(pid, :ping)
   def put(pid, name, value), do: GenServer.call(pid, {:put, name, value})
   def get(pid, name), do: GenServer.call(pid, {:get, name})
+  def last(pid, name), do: GenServer.call(pid, {:last, name})
+  def define(pid, name, opts), do: GenServer.call(pid, {:define, name, opts})
+  def keys(pid, opts \\ %{}), do: GenServer.call(pid, {:keys, opts})
 
   def handle_call(:ping, _from, state) do
     {:ok, %{"pong" => ""}} = %{ping: ""} |> query(state) |> parse_result
@@ -34,7 +37,26 @@ defmodule Kmk.Client do
   end
 
   def handle_call({:get, name}, _from, state) do
-    %{get: %{key: name}} 
+    %{get: %{key: name}}
+    |> gen_reply(state)
+  end
+
+  def handle_call({:last, name}, _from, state) do
+    reply = %{last: %{key: name}}
+      |> query(state)
+      |> refine_result(fn (result) ->
+        {result["time"], result["value"]}
+      end)
+    {:reply, reply, state}
+  end
+
+  def handle_call({:define, name, opts}, _from, state) do
+    %{define: %{name => opts}}
+    |> gen_reply(state)
+  end
+
+  def handle_call({:keys, opts}, _from, state) do
+    %{keys: opts}
     |> gen_reply(state)
   end
 
@@ -45,6 +67,13 @@ defmodule Kmk.Client do
       %{"result" => "ok"} -> :ok
       %{"result" => data} -> {:ok, data}
       %{"error" => error} -> {:error, error}
+    end
+  end
+
+  defp refine_result(result, fun) do
+    case result |> parse_result do
+      {:error, error} -> {:error, error}
+      {:ok, data} -> {:ok, fun.(data)}
     end
   end
 
