@@ -2,7 +2,8 @@ use Mix.Config
 
 config :komoku, :servers, [
   websocket: [
-    port: 7777
+    port: 7777,
+    api_version: 2
   ]
 ]
 
