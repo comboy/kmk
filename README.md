@@ -13,14 +13,16 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [{:kmk, "~> 0.1.0"}]
     end
     ```
-## Usage
-    ```elixir
-    {:ok, client} = Kmk.Client.start_link("ws://127.0.0.1:7777")
-    :ok = client |> Kmk.Client.put("foo", 123)
-    client |> Kmk.Client.get("foo", 123) # {:ok, 123}
-    ```
 
-    For more examples check [the tests](test/kmk/kmk_test.exs)
+## Usage
+
+  ```elixir
+  {:ok, client} = Kmk.Client.start_link("ws://127.0.0.1:7777")
+  :ok = client |> Kmk.Client.put("foo", 123)
+  client |> Kmk.Client.get("foo", 123) # {:ok, 123}
+  ```
+
+For more examples check [the tests](test/kmk/client_test.exs)
 
 ## Development
 
