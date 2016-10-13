@@ -1,8 +1,8 @@
 # Kmk
 
-**TODO: Add description**
+[Komoku](https://github.com/comboy/komoku) client written in Elixir. Currently only a proof of concept although basic functionality (get, put, subscribe) already works.
 
-## Installation
+## TODO Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
@@ -13,14 +13,24 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [{:kmk, "~> 0.1.0"}]
     end
     ```
-
-  2. Ensure `kmk` is started before your application:
-
+## Usage
     ```elixir
-    def application do
-      [applications: [:kmk]]
-    end
+    {:ok, client} = Kmk.Client.start_link("ws://127.0.0.1:7777")
+    :ok = client |> Kmk.Client.put("foo", 123)
+    client |> Kmk.Client.get("foo", 123) # {:ok, 123}
     ```
+
+    For more examples check [the tests](test/kmk/kmk_test.exs)
+
 ## Development
 
 Copy `config/test.exs.example` to `config/test.exs` and make sure database name and user are properly set up.
+
+## Contibutirng
+
+Any kind of contribution is very much welcome. Even a random comment, just open an issue.
+
+## License
+
+MIT
+
