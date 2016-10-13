@@ -32,4 +32,21 @@ defmodule Kmk.ClientTest do
   test "define", c do
     :ok = c[:client] |> Kmk.Client.define("foo_bar", %{type: "string"})
   end
+
+  test "subscribe", c do
+    :ok = c[:client] |> Kmk.Client.put("sub", 7)
+    :ok = c[:client] |> Kmk.Client.subscribe("sub")
+    ts = :os.system_time(:micro_seconds) / 1_000_000
+    :ok = c[:client] |> Kmk.Client.put("sub", 8)
+    assert_receive({:pub, %{key: "sub", value: 8, previous: 7, time: time}})
+    assert_in_delta time, ts, 0.1
+  end
+
+  test "unsubscribe", c do
+    :ok = c[:client] |> Kmk.Client.put("unsub", 7)
+    :ok = c[:client] |> Kmk.Client.subscribe("unsub")
+    :ok = c[:client] |> Kmk.Client.unsubscribe("unsub")
+    :ok = c[:client] |> Kmk.Client.put("unsub", 8)
+    refute_receive({:pub, %{key: "unsub"}})
+  end
 end
